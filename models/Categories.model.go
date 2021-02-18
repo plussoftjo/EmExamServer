@@ -7,6 +7,6 @@ import (
 
 // Categories ..
 type Categories struct {
-	Title string `json:"title" binding:"required"`
+	Title string `json:"title"`
 	gorm.Model
 }

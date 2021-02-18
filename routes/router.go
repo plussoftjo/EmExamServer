@@ -47,6 +47,7 @@ func Setup() {
 	// ~~~ Main Controller ~~~ //
 	main := r.Group("/main")
 	main.GET("/index", controllers.Index)
+	main.GET("/index_all_questions", controllers.IndexAllQuestions)
 	main.GET("/index_with_auth/:user_id", controllers.IndexWithAuth)
 	main.GET("/index/questions/:categories_id", controllers.Indexquestions)
 	main.POST("/store_notification_token", controllers.StoreNotificationToken)
@@ -57,6 +58,8 @@ func Setup() {
 	admin.POST("/store/questions", controllers.StoreQuestions)
 	admin.POST("/store/answers", controllers.StoreAnswers)
 
+	admin.POST("/store/QuestionWithAnswers", controllers.StoreQuestionsWithAnswers)
+	admin.POST("/question/remove/:id", controllers.RemoveQuestion)
 	r.Run(":8082")
 
 }

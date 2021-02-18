@@ -69,3 +69,17 @@ func StoreNotificationToken(c *gin.Context) {
 		"Message": "Success",
 	})
 }
+
+// IndexAllQuestions ..
+func IndexAllQuestions(c *gin.Context) {
+	var questions []models.Questions
+	var categories []models.Categories
+
+	config.DB.Find(&categories)
+	config.DB.Preload("Answers").Preload("Categories").Find(&questions)
+
+	c.JSON(200, gin.H{
+		"questions":  questions,
+		"categories": categories,
+	})
+}
