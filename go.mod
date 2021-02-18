@@ -14,6 +14,7 @@ require (
 	github.com/jinzhu/gorm v1.9.16
 	github.com/mattn/go-shellwords v1.0.11 // indirect
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
+	github.com/oliveroneill/exponent-server-sdk-golang v0.0.0-20200627013714-266e8e6ee5ad
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad
 	gopkg.in/urfave/cli.v1 v1.20.0 // indirect
 	gorm.io/gorm v1.20.11

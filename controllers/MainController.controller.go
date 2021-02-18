@@ -2,11 +2,13 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"server/config"
 	"server/models"
 
 	"github.com/gin-gonic/gin"
+	expo "github.com/oliveroneill/exponent-server-sdk-golang/sdk"
 )
 
 // Indexquestions ...
@@ -81,5 +83,60 @@ func IndexAllQuestions(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"questions":  questions,
 		"categories": categories,
+	})
+}
+
+// NotificationBody ..
+type NotificationBody struct {
+	Title string `json:"title"`
+	Body  string `json:"body"`
+}
+
+// SendNotificationForAll ..
+func SendNotificationForAll(c *gin.Context) {
+	var notificationBody NotificationBody
+	if err := c.ShouldBindJSON(&notificationBody); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var NotificationsToken []models.NotificationsToken
+	config.DB.Find(&NotificationsToken)
+
+	for _, notification := range NotificationsToken {
+		var tokens []expo.ExponentPushToken
+		pushToken, err := expo.NewExponentPushToken(notification.Token)
+		if err != nil {
+			fmt.Println("Error One")
+		}
+
+		tokens = append(tokens, pushToken)
+
+		// Create a new Expo SDK client
+		client := expo.NewPushClient(nil)
+
+		// Publish message
+		response, err := client.Publish(
+			&expo.PushMessage{
+				To:       tokens,
+				Body:     notificationBody.Body,
+				Data:     map[string]string{"date": "notification"},
+				Sound:    "default",
+				Title:    notificationBody.Title,
+				Priority: expo.DefaultPriority,
+			},
+		)
+		// Check errors
+		if err != nil {
+			fmt.Println("error")
+		}
+		// Validate responses
+		if response.ValidateResponse() != nil {
+
+		}
+	}
+
+	c.JSON(200, gin.H{
+		"message": "Success",
 	})
 }

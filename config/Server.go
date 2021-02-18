@@ -15,7 +15,7 @@ var ServerInfo Server
 // ServerInformations ..
 func ServerInformations() Server {
 	dev := true
-	serverName := "questions"
+	serverName := "emexam"
 
 	var publicPath string
 	var serverURI string

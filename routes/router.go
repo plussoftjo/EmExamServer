@@ -60,6 +60,8 @@ func Setup() {
 
 	admin.POST("/store/QuestionWithAnswers", controllers.StoreQuestionsWithAnswers)
 	admin.POST("/question/remove/:id", controllers.RemoveQuestion)
+
+	admin.POST("/send_notifications_all", controllers.SendNotificationForAll)
 	r.Run(":8082")
 
 }
