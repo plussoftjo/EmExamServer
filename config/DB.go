@@ -32,6 +32,7 @@ func SetupDB() {
 	database.AutoMigrate(&models.Answers{})
 	database.AutoMigrate(&models.UserResults{})
 	database.AutoMigrate(&models.NotificationsToken{})
+	database.AutoMigrate(&models.ExamLogs{})
 
 	// Confirm the DB variables
 	DB = database

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"server/config"
 	"server/models"
+	"server/vendors"
 
 	"github.com/gin-gonic/gin"
 	expo "github.com/oliveroneill/exponent-server-sdk-golang/sdk"
@@ -20,6 +21,29 @@ func Indexquestions(c *gin.Context) {
 		Where("categories_id = ?", categoriesID).
 		Preload("Answers").
 		Find(&questions)
+
+	// StoreQuestionLogs
+	startOfToday, endOfToday := vendors.BetwenToday()
+	var todayCount int64
+	config.DB.Model(&models.ExamLogs{}).
+		Where("created_at BETWEEN ? AND ?", startOfToday, endOfToday).
+		Count(&todayCount)
+
+	if todayCount == 0 {
+		config.DB.Create(&models.ExamLogs{
+			Number: 1,
+		})
+	} else {
+		var todayExamLogs models.ExamLogs
+		config.DB.
+			Where("created_at BETWEEN ? AND ?", startOfToday, endOfToday).
+			First(&todayExamLogs)
+		examNumber := todayExamLogs.Number
+		examNumber = examNumber + 1
+		config.DB.Model(&models.ExamLogs{}).
+			Where("id = ?", todayExamLogs.ID).
+			Update("number", examNumber)
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"questions": questions,
