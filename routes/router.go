@@ -62,6 +62,6 @@ func Setup() {
 	admin.POST("/question/remove/:id", controllers.RemoveQuestion)
 
 	admin.POST("/send_notifications_all", controllers.SendNotificationForAll)
-	r.Run(":8084")
+	r.Run(":8082")
 
 }

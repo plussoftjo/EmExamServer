@@ -3,6 +3,8 @@ package config
 
 import (
 	"github.com/jinzhu/gorm"
+	"github.com/tkrajina/typescriptify-golang-structs/typescriptify"
+
 	// Connect mysql
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
@@ -17,7 +19,7 @@ var DB *gorm.DB
 
 // SetupDB ..
 func SetupDB() {
-	database, err := gorm.Open("mysql", "root:@tcp(127.0.0.1:3307)/emexam?charset=utf8mb4&parseTime=True&loc=Local")
+	database, err := gorm.Open("mysql", "root:00962s00962S!@tcp(127.0.0.1:3306)/emexam?charset=utf8mb4&parseTime=True&loc=Local")
 
 	// If Error in Connect
 	if err != nil {
@@ -33,6 +35,11 @@ func SetupDB() {
 	database.AutoMigrate(&models.UserResults{})
 	database.AutoMigrate(&models.NotificationsToken{})
 	database.AutoMigrate(&models.ExamLogs{})
+
+	converter := typescriptify.New().
+		Add(&models.User{}).
+		Add(&models.Questions{})
+	converter.ConvertToFile("ts/models.ts")
 
 	// Confirm the DB variables
 	DB = database
