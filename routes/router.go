@@ -43,14 +43,19 @@ func Setup() {
 	auth.GET("/auth", controllers.Auth)
 	auth.POST("/update", controllers.UpdateUser)
 	auth.POST("/store/results", controllers.StoreUserResults)
+	auth.POST("/store/logs", controllers.StoreUserLogs)
+	auth.GET("/show/logs/:id", controllers.IndexUserLogs)
 
 	// ~~~ Main Controller ~~~ //
 	main := r.Group("/main")
 	main.GET("/index", controllers.Index)
+	main.GET("/indexx", controllers.Indexx)
 	main.GET("/index_all_questions", controllers.IndexAllQuestions)
 	main.GET("/index_with_auth/:user_id", controllers.IndexWithAuth)
 	main.GET("/index/questions/:categories_id", controllers.Indexquestions)
-	main.POST("/store_notification_token", controllers.StoreNotificationToken)
+	main.POST("/store/notificationToken", controllers.StoreNotificationToken)
+	main.POST("/toggle/notificationToken", controllers.ToggleNotification)
+	main.POST("/store/callUs", controllers.StoreCallUs)
 
 	// ~~~ Admin Controller ~~~ //
 	admin := r.Group("/admin")

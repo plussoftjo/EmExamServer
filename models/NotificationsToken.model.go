@@ -8,7 +8,7 @@ import (
 // NotificationsToken ..
 type NotificationsToken struct {
 	Token  string `json:"token" binding:"required"`
-	userID uint   `json:"user_id"`
-	Active bool   `json:"user_id" gorm:"default:1"`
+	UserID uint   `json:"userID"`
+	Active bool   `json:"active" gorm:"default:1"`
 	gorm.Model
 }

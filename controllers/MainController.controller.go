@@ -45,9 +45,7 @@ func Indexquestions(c *gin.Context) {
 			Update("number", examNumber)
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"questions": questions,
-	})
+	c.JSON(http.StatusOK, questions)
 }
 
 // Index ..
@@ -60,6 +58,17 @@ func Index(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"categories": categories,
 	})
+
+}
+
+// Indexx ..
+func Indexx(c *gin.Context) {
+
+	var categories []models.Categories
+
+	config.DB.Find(&categories)
+
+	c.JSON(http.StatusOK, categories)
 
 }
 
@@ -86,14 +95,42 @@ func StoreNotificationToken(c *gin.Context) {
 		return
 	}
 
-	if err := config.DB.Create(&notificationsToken).Error; err != nil {
+	config.DB.Where("token = ?", notificationsToken.Token).FirstOrCreate(&notificationsToken)
+
+	c.JSON(http.StatusOK, notificationsToken)
+}
+
+// ToggleNotification ...
+func ToggleNotification(c *gin.Context) {
+	type ToggleNotificationType struct {
+		Token  string `json:"token"`
+		Active bool   `json:"active"`
+	}
+	var data ToggleNotificationType
+	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"Message": "Success",
-	})
+	var notificationToken models.NotificationsToken
+	err := config.DB.Model(&models.NotificationsToken{}).Where("token = ?", data.Token).First(&notificationToken).Error
+	if err != nil {
+		c.JSON(500, gin.H{
+			"err":  err.Error(),
+			"code": 101,
+		})
+		return
+	}
+
+	if notificationToken.Active == true {
+		notificationToken.Active = false
+	} else {
+		notificationToken.Active = true
+	}
+
+	config.DB.Save(&notificationToken)
+
+	c.JSON(200, gin.H{"message": "success"})
 }
 
 // IndexAllQuestions ..
@@ -162,5 +199,25 @@ func SendNotificationForAll(c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"message": "Success",
+	})
+}
+
+// StoreCallUs ..
+func StoreCallUs(c *gin.Context) {
+	var data models.CallUs
+
+	c.ShouldBindJSON(&data)
+
+	err := config.DB.Create(&data).Error
+	if err != nil {
+		c.JSON(500, gin.H{
+			"err":  err.Error(),
+			"code": 101,
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "success",
 	})
 }
