@@ -37,6 +37,7 @@ func SetupDB() {
 	database.AutoMigrate(&models.ExamLogs{})
 	database.AutoMigrate(&models.UserLogs{})
 	database.AutoMigrate(&models.CallUs{})
+	database.AutoMigrate(&models.TypeCheck{})
 
 	converter := typescriptify.New().
 		Add(&models.User{}).

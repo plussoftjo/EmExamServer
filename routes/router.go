@@ -67,6 +67,13 @@ func Setup() {
 	admin.POST("/question/remove/:id", controllers.RemoveQuestion)
 
 	admin.POST("/send_notifications_all", controllers.SendNotificationForAll)
+
+	// ~~~ TypeCheck Controller ~~~ //
+	typeCheck := r.Group("/typecheck")
+	typeCheck.POST("/store", controllers.StoreTypeCheck)
+	typeCheck.GET("/index", controllers.GetTypeCheck)
+	typeCheck.POST("/index/with_filter", controllers.IndexWithFilterTypeCheck)
+
 	r.Run(":8082")
 
 }
